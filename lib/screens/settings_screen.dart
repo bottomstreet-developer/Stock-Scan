@@ -610,7 +610,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   _row(
                     'Feedback',
-                    onTap: () => _launchUrl('https://forms.gle/'),
+                    onTap: () => _launchUrl('https://forms.gle/4dnFBwmwAMgpkXmb6'),
                   ),
                   _row(
                     'Privacy Policy',
