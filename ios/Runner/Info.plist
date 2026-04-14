@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Stocksnap</string>
+	<string>StockSnap</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -72,6 +72,10 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<false/>
+	<key>UISupportsDocumentBrowser</key>
+	<false/>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -79,6 +83,10 @@
 			<string>StockSnap Backup</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
+			<key>LSSupportsOpeningDocumentsInPlace</key>
+			<false/>
+			<key>UISupportsDocumentBrowser</key>
+			<false/>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>public.json</string>
