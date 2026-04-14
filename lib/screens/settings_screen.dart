@@ -12,6 +12,8 @@ import 'package:stocksnap/services/notification_service.dart';
 import 'package:stocksnap/services/prefs_service.dart';
 import 'package:stocksnap/services/purchase_service.dart';
 import 'package:stocksnap/services/backup_service.dart';
+import 'package:stocksnap/utils/app_dialogs.dart';
+import 'package:stocksnap/utils/app_feedback.dart';
 import 'package:stocksnap/utils/responsive.dart';
 import 'package:stocksnap/widgets/pro_upgrade_sheet.dart';
 
@@ -583,9 +585,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       }
                       final ok = await BackupService.backupNow(context);
                       if (!context.mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(ok ? 'Backup complete' : 'Backup failed')),
-                      );
+                      showAppSnackBar(ok ? 'Backup complete' : 'Backup failed');
                       if (ok && mounted) {
                         setState(() {
                           _lastBackupDateFuture = BackupService.getLastBackupDate();
@@ -618,45 +618,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         await showStocksnapProUpgradeSheet(context);
                         return;
                       }
-                      final confirm = await showDialog<bool>(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          title: const Text('Restore Backup'),
-                          content: const Text(
+                      final confirm = await showConfirmDialog(
+                        context,
+                        title: 'Restore Backup',
+                        content:
                             'This will replace all your current inventory with the backup. This cannot be undone.',
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, false),
-                              child: const Text('Cancel',
-                                style: TextStyle(color: Color(0xFF888888))),
-                            ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF0A0A0A),
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              onPressed: () => Navigator.pop(context, true),
-                              child: const Text('Restore'),
-                            ),
-                          ],
-                        ),
+                        confirmLabel: 'Restore',
+                        cancelLabel: 'Cancel',
                       );
                       if (confirm != true || !context.mounted) return;
                       final ok = await BackupService.restoreBackup();
                       if (!context.mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(ok
+                      showAppSnackBar(ok
                           ? 'Restore complete. Restart the app.'
-                          : 'Restore failed')),
-                      );
+                          : 'Restore failed');
                     },
                     child: Container(
                       width: double.infinity,

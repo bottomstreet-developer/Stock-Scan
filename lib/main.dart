@@ -13,6 +13,7 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:stocksnap/screens/home_screen.dart';
+import 'package:stocksnap/utils/app_feedback.dart';
 import 'package:stocksnap/utils/responsive.dart';
 import 'package:stocksnap/services/database_service.dart';
 import 'package:stocksnap/services/notification_service.dart';
@@ -38,6 +39,40 @@ bool suppressLock = false;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+  };
+
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return const Material(
+      color: Colors.white,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.error_outline, size: 48, color: Color(0xFF1A1A1A)),
+            SizedBox(height: 12),
+            Text(
+              'Something went wrong',
+              style: TextStyle(
+                fontSize: 18,
+                color: Color(0xFF1A1A1A),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(height: 6),
+            Text(
+              'Please restart the app',
+              style: TextStyle(
+                fontSize: 14,
+                color: Color(0xFF8A8A8A),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  };
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.dark,
@@ -73,6 +108,7 @@ class StockSnapApp extends StatelessWidget {
     return MaterialApp(
       title: 'StockSnap',
       debugShowCheckedModeBanner: false,
+      scaffoldMessengerKey: appScaffoldMessengerKey,
       builder: (context, child) {
         R.init(context);
         return child!;
