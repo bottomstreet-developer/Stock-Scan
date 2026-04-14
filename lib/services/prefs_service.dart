@@ -70,7 +70,7 @@ class PrefsService {
   }
 
   bool get notificationsEnabled =>
-      _sp.getBool(_notificationsEnabledKey) ?? true;
+      _sp.getBool(_notificationsEnabledKey) ?? false;
   Future<void> setNotificationsEnabled(bool value) =>
       _sp.setBool(_notificationsEnabledKey, value);
 }

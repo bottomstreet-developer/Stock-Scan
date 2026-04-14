@@ -151,7 +151,8 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
         if (mounted) {
           await showStocksnapProUpgradeSheet(context);
         }
-        return;
+        // After paywall closes, re-check pro status.
+        if (!PurchaseService.instance.isPro) return;
       }
 
       final now = DateTime.now();

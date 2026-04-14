@@ -26,6 +26,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
   @override
   void initState() {
     super.initState();
+    PurchaseService.instance.addListener(_onProChanged);
     inventoryChangeNotifier.addListener(_onInventoryChanged);
     _loadItems();
     _searchController.addListener(_searchItems);
@@ -33,9 +34,14 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   @override
   void dispose() {
+    PurchaseService.instance.removeListener(_onProChanged);
     inventoryChangeNotifier.removeListener(_onInventoryChanged);
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _onProChanged() {
+    if (mounted) setState(() {});
   }
 
   void _onInventoryChanged() => _loadItems();

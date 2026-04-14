@@ -30,9 +30,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
+    PurchaseService.instance.addListener(_onProChanged);
     _loadVersion();
     _loadCurrencySymbol();
     _loadAppLockEnabled();
+  }
+
+  void _onProChanged() {
+    if (mounted) setState(() {});
+  }
+
+  @override
+  void dispose() {
+    PurchaseService.instance.removeListener(_onProChanged);
+    super.dispose();
   }
 
   Future<void> _loadAppLockEnabled() async {

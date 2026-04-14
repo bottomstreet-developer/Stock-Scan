@@ -1021,24 +1021,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _listCard({EdgeInsets? margin, required Widget child}) {
-    return Container(
-      margin: margin ?? const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFE4E6EA)),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: child,
-    );
-  }
-
   Widget _stateCard({
     required IconData icon,
     required String title,
     required String message,
   }) {
-    return _listCard(
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: const Color(0xFFE4E6EA)),
+        borderRadius: BorderRadius.circular(16),
+      ),
       child: Padding(
         padding: EdgeInsets.all(R.sp(16)),
         child: Column(
