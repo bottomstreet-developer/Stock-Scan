@@ -5,11 +5,13 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:stocksnap/models/item.dart';
+import 'package:stocksnap/screens/earn_screen.dart';
 import 'package:stocksnap/services/database_service.dart';
 import 'package:stocksnap/services/inventory_notifier.dart';
 import 'package:stocksnap/services/notification_service.dart';
 import 'package:stocksnap/services/prefs_service.dart';
 import 'package:stocksnap/services/purchase_service.dart';
+import 'package:stocksnap/utils/responsive.dart';
 import 'package:stocksnap/widgets/pro_upgrade_sheet.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -63,58 +65,66 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
+  String _getCurrencyLabel(String symbol) {
+    const map = {
+      '\$': 'USD',
+      '£': 'GBP',
+      '€': 'EUR',
+      '₹': 'INR',
+      '¥': 'JPY',
+      'A\$': 'AUD',
+      'C\$': 'CAD',
+      'S\$': 'SGD',
+    };
+    return map[symbol] ?? symbol;
+  }
+
   Future<void> _handleAppLockToggle(bool value) async {
-    if (!value) {
-      setState(() => _appLockEnabled = false);
+    if (value) {
       try {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('app_lock_enabled', false);
-      } catch (_) {}
-      return;
-    }
+        // Check if device supports biometrics at hardware level
+        final isSupported = await _localAuth.isDeviceSupported();
+        if (!isSupported) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'Biometric authentication not supported on this device',
+                ),
+              ),
+            );
+          }
+          return;
+        }
 
-    try {
-      final canCheck = await _localAuth.canCheckBiometrics;
-      final isSupported = await _localAuth.isDeviceSupported();
-      if (!canCheck || !isSupported) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Biometric authentication not available on this device'),
+        // Get available biometrics
+        await _localAuth.getAvailableBiometrics();
+
+        // If no biometrics enrolled, still allow PIN/pattern as fallback
+        // by proceeding with authenticate which will use device credentials
+        final authenticated = await _localAuth.authenticate(
+          localizedReason: 'Confirm to enable App Lock',
+          options: const AuthenticationOptions(
+            biometricOnly: false, // allow PIN/pattern fallback
+            stickyAuth: true,
           ),
         );
-        setState(() => _appLockEnabled = false);
+
+        if (!authenticated) return;
+      } catch (e) {
+        debugPrint('Biometric error: $e');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Could not enable App Lock: ${e.toString()}')),
+          );
+        }
         return;
       }
-
-      final authenticated = await _localAuth.authenticate(
-        localizedReason: 'Unlock StockSnap',
-      );
-      if (!authenticated) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Biometric authentication not available on this device'),
-          ),
-        );
-        setState(() => _appLockEnabled = false);
-        return;
-      }
-
-      setState(() => _appLockEnabled = true);
-      try {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('app_lock_enabled', true);
-      } catch (_) {}
-    } catch (_) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Biometric authentication not available on this device'),
-        ),
-      );
-      setState(() => _appLockEnabled = false);
     }
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('app_lock_enabled', value);
+    if (mounted) setState(() => _appLockEnabled = value);
   }
 
   void _showCurrencyPicker() {
@@ -388,10 +398,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'STOCKSNAP PRO',
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: R.fs(11),
                         fontWeight: FontWeight.w600,
                         color: Color(0xFF999999),
                         letterSpacing: 1.5,
@@ -497,23 +507,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'App Lock',
                                 style: TextStyle(
-                                  fontSize: 15,
+                                  fontSize: R.fs(15),
                                   fontWeight: FontWeight.w500,
                                   color: Color(0xFF1A1A1A),
                                 ),
                               ),
-                              SizedBox(height: 2),
+                              const SizedBox(height: 2),
                               Text(
                                 'Require Face ID / Fingerprint To Open StockSnap',
                                 style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: R.fs(12),
                                   color: Color(0xFF8A8A8A),
                                 ),
                               ),
@@ -521,7 +531,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ),
                         Switch(
-                          activeColor: const Color(0xFF00C48C),
+                          activeThumbColor: const Color(0xFF00C48C),
                           value: _appLockEnabled,
                           onChanged: _handleAppLockToggle,
                         ),
@@ -544,11 +554,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          _currencySymbol,
+                          _getCurrencyLabel(_currencySymbol),
                           style: const TextStyle(
-                            fontSize: 15,
+                            fontSize: 14,
                             color: Color(0xFF8A8A8A),
-                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         const SizedBox(width: 4),
@@ -558,6 +567,45 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           color: Color(0xFFCCCCCC),
                         ),
                       ],
+                    ),
+                  ),
+                  _row(
+                    'Refer & Earn',
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF00C48C)
+                                .withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            'Earn 30%',
+                            style: TextStyle(
+                              fontSize: R.fs(11),
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF00C48C),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        const Icon(
+                          Icons.chevron_right,
+                          size: 18,
+                          color: Color(0xFFCCCCCC),
+                        ),
+                      ],
+                    ),
+                    onTap: () => Navigator.push<void>(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (_) => const EarnScreen(),
+                      ),
                     ),
                   ),
                   _row(
@@ -658,7 +706,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Widget _card({required Widget child}) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(R.sp(20)),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: const Color(0xFFE8ECF0)),
@@ -673,8 +721,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       padding: const EdgeInsets.fromLTRB(4, 20, 0, 10),
       child: Text(
         text,
-        style: const TextStyle(
-          fontSize: 11,
+        style: TextStyle(
+          fontSize: R.fs(11),
           fontWeight: FontWeight.w600,
           color: Color(0xFF8A8A8A),
           letterSpacing: 1.5,
@@ -699,8 +747,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             Text(
               label,
-              style: const TextStyle(
-                fontSize: 15,
+              style: TextStyle(
+                fontSize: R.fs(15),
                 fontWeight: FontWeight.w500,
                 color: Color(0xFF1A1A1A),
               ),

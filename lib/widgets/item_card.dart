@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stocksnap/models/item.dart';
+import 'package:stocksnap/utils/responsive.dart';
 import 'package:stocksnap/services/prefs_service.dart';
 
 class ItemCard extends StatelessWidget {
@@ -25,7 +26,7 @@ class ItemCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        padding: EdgeInsets.symmetric(horizontal: R.sp(16), vertical: R.sp(14)),
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: const Color(0xFFF0F1F3)),
@@ -51,8 +52,8 @@ class ItemCard extends StatelessWidget {
                       ),
                     Text(
                       item.name,
-                      style: const TextStyle(
-                        fontSize: 15,
+                      style: TextStyle(
+                        fontSize: R.fs(15),
                         fontWeight: FontWeight.w600,
                         color: Color(0xFF1A1A1A),
                       ),
@@ -62,7 +63,7 @@ class ItemCard extends StatelessWidget {
                 const SizedBox(height: 3),
                 Text(
                   item.category ?? '',
-                  style: const TextStyle(fontSize: 13, color: Color(0xFF8A8A8A)),
+                  style: TextStyle(fontSize: R.fs(13), color: Color(0xFF8A8A8A)),
                 ),
               ],
             ),
@@ -71,12 +72,12 @@ class ItemCard extends StatelessWidget {
               children: [
                 Text(
                   '$currencySymbol${item.sellPrice.toStringAsFixed(2)}',
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: R.fs(15), fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 3),
                 Text(
                   '${item.quantity} In Stock',
-                  style: const TextStyle(fontSize: 13, color: Color(0xFF8A8A8A)),
+                  style: TextStyle(fontSize: R.fs(13), color: Color(0xFF8A8A8A)),
                 ),
               ],
             ),

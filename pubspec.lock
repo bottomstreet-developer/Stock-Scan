@@ -57,6 +57,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
+  checked_yaml:
+    dependency: transitive
+    description:
+      name: checked_yaml
+      sha256: "959525d3162f249993882720d52b7e0c833978df229be20702b33d48d91de70f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.4"
+  cli_util:
+    dependency: transitive
+    description:
+      name: cli_util
+      sha256: ff6785f7e9e3c38ac98b2fb035701789de90154024a75b6cb926445e83197d1c
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.2"
   clock:
     dependency: transitive
     description:
@@ -190,6 +206,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_launcher_icons:
+    dependency: "direct dev"
+    description:
+      name: flutter_launcher_icons
+      sha256: "526faf84284b86a4cb36d20a5e45147747b7563d921373d4ee0559c54fcdbcea"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.13.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -281,7 +305,7 @@ packages:
     source: hosted
     version: "1.0.2"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       sha256: "87721a4a50b19c7f1d49001e51409bddc46303966ce89a65af4f4e6004896412"
@@ -368,6 +392,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.2"
+  in_app_update:
+    dependency: "direct main"
+    description:
+      name: in_app_update
+      sha256: "9924a3efe592e1c0ec89dda3683b3cfec3d4cd02d908e6de00c24b759038ddb1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.5"
   intl:
     dependency: "direct main"
     description:

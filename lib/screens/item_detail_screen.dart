@@ -7,6 +7,7 @@ import 'package:stocksnap/services/database_service.dart';
 import 'package:stocksnap/services/inventory_notifier.dart';
 import 'package:stocksnap/services/prefs_service.dart';
 import 'package:stocksnap/services/purchase_service.dart';
+import 'package:stocksnap/utils/responsive.dart';
 
 class ItemDetailScreen extends StatefulWidget {
   const ItemDetailScreen({super.key, required this.item});
@@ -106,7 +107,11 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     final currencySymbol = PrefsService.instance.currency;
     final isPro = PurchaseService.instance.isPro;
     final hasPhoto = _item.photoPath != null && _item.photoPath!.isNotEmpty;
-    return Column(
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.sizeOf(context).height * 0.82,
+      ),
+      child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Center(
@@ -133,8 +138,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         child: Text(
                           _item.name,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 22,
+                          style: TextStyle(
+                            fontSize: R.fs(22),
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF1A1A1A),
                           ),
@@ -218,12 +223,12 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                     const SizedBox(width: 10),
                                   ],
                                 ),
-                                const Row(
+                                Row(
                                   children: [
                                     Text(
                                       'View',
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: R.fs(14),
                                         fontWeight: FontWeight.w500,
                                         color: Color(0xFF1A1A1A),
                                       ),
@@ -251,15 +256,15 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       _row('Category', _item.category ?? '-'),
                       Row(
                         children: [
-                          const Text(
+                          Text(
                             'Quantity',
-                            style: TextStyle(fontSize: 13, color: Color(0xFF8A8A8A)),
+                            style: TextStyle(fontSize: R.fs(14), color: Color(0xFF8A8A8A)),
                           ),
                           const Spacer(),
                           Text(
                             '${_item.quantity}',
-                            style: const TextStyle(
-                              fontSize: 15,
+                            style: TextStyle(
+                              fontSize: R.fs(14),
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF1A1A1A),
                             ),
@@ -302,15 +307,15 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       const Divider(color: Color(0xFFF0F1F3)),
                       _row('Min Quantity', _item.minQuantity.toString()),
                       const SizedBox(height: 8),
-                      const Text(
+                      Text(
                         'Notes',
-                        style: TextStyle(fontSize: 13, color: Color(0xFF8A8A8A)),
+                        style: TextStyle(fontSize: R.fs(14), color: Color(0xFF8A8A8A)),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         (_item.notes == null || _item.notes!.isEmpty) ? '-' : _item.notes!,
-                        style: const TextStyle(
-                          fontSize: 15,
+                        style: TextStyle(
+                          fontSize: R.fs(14),
                           fontWeight: FontWeight.w500,
                           color: Color(0xFF1A1A1A),
                         ),
@@ -328,7 +333,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
             children: [
               SizedBox(
                 width: double.infinity,
-                height: 52,
+                height: R.sp(52),
                 child: ElevatedButton(
                   onPressed: _editItem,
                   style: ElevatedButton.styleFrom(
@@ -358,6 +363,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
           ),
         ),
       ],
+    ),
     );
   }
 
@@ -369,13 +375,13 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(fontSize: 13, color: Color(0xFF8A8A8A)),
+              style: TextStyle(fontSize: R.fs(14), color: Color(0xFF8A8A8A)),
             ),
           ),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 15,
+            style: TextStyle(
+              fontSize: R.fs(14),
               fontWeight: FontWeight.w500,
               color: Color(0xFF1A1A1A),
             ),

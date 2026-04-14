@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stocksnap/utils/responsive.dart';
 
 class DrillDownItem {
   final String name;
@@ -58,8 +59,8 @@ class DrillDownScreen extends StatelessWidget {
                 Expanded(
                   child: Text(
                     title,
-                    style: const TextStyle(
-                      fontSize: 20,
+                    style: TextStyle(
+                      fontSize: R.fs(20),
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF1A1A1A),
                       letterSpacing: -0.3,
@@ -86,14 +87,14 @@ class DrillDownScreen extends StatelessWidget {
           ),
           Expanded(
             child: ListView.separated(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+              padding: EdgeInsets.all(R.sp(16)),
               itemCount: items.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 8),
+              separatorBuilder: (context, index) => SizedBox(height: R.sp(8)),
               itemBuilder: (context, index) {
                 final item = items[index];
                 return Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      EdgeInsets.symmetric(horizontal: R.sp(16), vertical: R.sp(14)),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
@@ -108,8 +109,8 @@ class DrillDownScreen extends StatelessWidget {
                           children: [
                             Text(
                               item.name,
-                              style: const TextStyle(
-                                fontSize: 15,
+                              style: TextStyle(
+                                fontSize: R.fs(15),
                                 fontWeight: FontWeight.w600,
                                 color: Color(0xFF1A1A1A),
                               ),
@@ -117,8 +118,8 @@ class DrillDownScreen extends StatelessWidget {
                             const SizedBox(height: 3),
                             Text(
                               item.subtitle,
-                              style: const TextStyle(
-                                fontSize: 13,
+                              style: TextStyle(
+                                fontSize: R.fs(13),
                                 color: Color(0xFF8A8A8A),
                               ),
                             ),
@@ -130,8 +131,8 @@ class DrillDownScreen extends StatelessWidget {
                         children: [
                           Text(
                             item.primaryValue,
-                            style: const TextStyle(
-                              fontSize: 15,
+                            style: TextStyle(
+                              fontSize: R.fs(15),
                               fontWeight: FontWeight.w600,
                               color: Color(0xFF1A1A1A),
                             ),
@@ -139,8 +140,8 @@ class DrillDownScreen extends StatelessWidget {
                           const SizedBox(height: 3),
                           Text(
                             item.secondaryValue,
-                            style: const TextStyle(
-                              fontSize: 13,
+                            style: TextStyle(
+                              fontSize: R.fs(13),
                               color: Color(0xFF8A8A8A),
                             ),
                           ),

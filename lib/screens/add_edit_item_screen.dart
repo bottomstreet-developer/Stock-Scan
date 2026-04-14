@@ -10,6 +10,7 @@ import 'package:stocksnap/services/database_service.dart';
 import 'package:stocksnap/services/inventory_notifier.dart';
 import 'package:stocksnap/services/prefs_service.dart';
 import 'package:stocksnap/services/purchase_service.dart';
+import 'package:stocksnap/utils/responsive.dart';
 import 'package:stocksnap/widgets/pro_upgrade_sheet.dart';
 
 class AddEditItemScreen extends StatefulWidget {
@@ -457,7 +458,7 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
           ),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
               children: [
                 Form(
                   key: _formKey,
@@ -492,7 +493,7 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
                       _field(controller: _skuController, label: 'SKU'),
                       const SizedBox(height: 12),
                       Container(
-                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                        padding: EdgeInsets.fromLTRB(R.sp(16), R.sp(12), R.sp(16), R.sp(12)),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
@@ -501,10 +502,10 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               'Barcode',
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: R.fs(12),
                                 color: Color(0xFF8A8A8A),
                               ),
                             ),
@@ -514,8 +515,8 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
                                 Expanded(
                                   child: TextFormField(
                                     controller: _barcodeController,
-                                    style: const TextStyle(
-                                      fontSize: 15,
+                                    style: TextStyle(
+                                      fontSize: R.fs(15),
                                       color: Color(0xFF1A1A1A),
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -550,7 +551,7 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
                       _field(controller: _categoryController, label: 'Category'),
                       const SizedBox(height: 12),
                       Container(
-                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                        padding: EdgeInsets.fromLTRB(R.sp(16), R.sp(12), R.sp(16), R.sp(12)),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
@@ -559,10 +560,10 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               'Cost price',
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: R.fs(12),
                                 color: Color(0xFF8A8A8A),
                               ),
                             ),
@@ -571,8 +572,8 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
                               children: [
                                 Text(
                                   currencySymbol,
-                                  style: const TextStyle(
-                                    fontSize: 15,
+                                  style: TextStyle(
+                                    fontSize: R.fs(15),
                                     fontWeight: FontWeight.w500,
                                     color: Color(0xFF1A1A1A),
                                   ),
@@ -584,8 +585,8 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
                                     keyboardType: const TextInputType.numberWithOptions(
                                       decimal: true,
                                     ),
-                                    style: const TextStyle(
-                                      fontSize: 15,
+                                    style: TextStyle(
+                                      fontSize: R.fs(15),
                                       color: Color(0xFF1A1A1A),
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -605,7 +606,7 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
                       ),
                       const SizedBox(height: 12),
                       Container(
-                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                        padding: EdgeInsets.fromLTRB(R.sp(16), R.sp(12), R.sp(16), R.sp(12)),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
@@ -614,10 +615,10 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               'Sell price',
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: R.fs(12),
                                 color: Color(0xFF8A8A8A),
                               ),
                             ),
@@ -626,8 +627,8 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
                               children: [
                                 Text(
                                   currencySymbol,
-                                  style: const TextStyle(
-                                    fontSize: 15,
+                                  style: TextStyle(
+                                    fontSize: R.fs(15),
                                     fontWeight: FontWeight.w500,
                                     color: Color(0xFF1A1A1A),
                                   ),
@@ -639,8 +640,8 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
                                     keyboardType: const TextInputType.numberWithOptions(
                                       decimal: true,
                                     ),
-                                    style: const TextStyle(
-                                      fontSize: 15,
+                                    style: TextStyle(
+                                      fontSize: R.fs(15),
                                       color: Color(0xFF1A1A1A),
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -678,50 +679,60 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
                         label: 'Notes',
                         maxLines: 3,
                       ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 52,
-                        child: ElevatedButton(
-                          onPressed: _saving ? null : _save,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1A1A1A),
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                          ),
-                          child: _saving
-                              ? const SizedBox(
-                                  height: 18,
-                                  width: 18,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : const Text('Save Item'),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: const Center(
-                          child: Text(
-                            'Cancel',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Color(0xFF8A8A8A),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 32),
                     ],
                   ),
                 ),
               ],
+            ),
+          ),
+          SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: ElevatedButton(
+                      onPressed: _saving ? null : _save,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF1A1A1A),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      child: _saving
+                          ? const SizedBox(
+                              height: 18,
+                              width: 18,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text('Save Item'),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Center(
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Color(0xFF8A8A8A),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
             ),
           ),
         ],
@@ -738,7 +749,7 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
     String? prefixText,
   }) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+      padding: EdgeInsets.fromLTRB(R.sp(16), R.sp(12), R.sp(16), R.sp(12)),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -749,8 +760,8 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
         children: [
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 12,
+            style: TextStyle(
+              fontSize: R.fs(12),
               color: Color(0xFF8A8A8A),
             ),
           ),
@@ -760,8 +771,8 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
             keyboardType: keyboardType,
             maxLines: maxLines,
             validator: validator,
-            style: const TextStyle(
-              fontSize: 15,
+            style: TextStyle(
+              fontSize: R.fs(15),
               color: Color(0xFF1A1A1A),
               fontWeight: FontWeight.w500,
             ),
@@ -773,8 +784,8 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
               contentPadding: EdgeInsets.zero,
             ).copyWith(
               prefixText: prefixText,
-              prefixStyle: const TextStyle(
-                fontSize: 15,
+              prefixStyle: TextStyle(
+                fontSize: R.fs(15),
                 color: Color(0xFF1A1A1A),
                 fontWeight: FontWeight.w500,
               ),

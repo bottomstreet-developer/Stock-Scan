@@ -12,6 +12,7 @@ import 'package:stocksnap/services/inventory_notifier.dart';
 import 'package:stocksnap/services/prefs_service.dart';
 import 'package:stocksnap/services/purchase_service.dart';
 import 'package:stocksnap/services/stocksnap_tab_notifier.dart';
+import 'package:stocksnap/utils/responsive.dart';
 import 'package:stocksnap/widgets/pro_upgrade_sheet.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -356,11 +357,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
+              color: Color(0xFF1A1A1A),
+              backgroundColor: Colors.white,
               onRefresh: _loadData,
               child: _errorMessage != null
                   ? ListView(
                       physics: const AlwaysScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(R.sp(16)),
                       children: [
                         _stateCard(
                           icon: Icons.error_outline,
@@ -371,13 +374,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     )
                   : ListView(
                       physics: const AlwaysScrollableScrollPhysics(),
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
+                      padding: EdgeInsets.fromLTRB(R.sp(16), 0, R.sp(16), R.sp(120)),
                       children: [
                         GridView.count(
                           crossAxisCount: 2,
                           shrinkWrap: true,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
+                          crossAxisSpacing: R.sp(12),
+                          mainAxisSpacing: R.sp(12),
                           childAspectRatio: 1.3,
                           physics: const NeverScrollableScrollPhysics(),
                           children: [
@@ -489,10 +492,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: R.sp(12)),
                         Container(
                           width: double.infinity,
-                          padding: const EdgeInsets.all(16),
+                          padding: EdgeInsets.all(R.sp(16)),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(16),
@@ -501,46 +504,46 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                              Text(
                                 'LOW STOCK',
                                 style: TextStyle(
-                                  fontSize: 11,
+                                  fontSize: R.fs(11),
                                   fontWeight: FontWeight.w600,
                                   color: Color(0xFF8A8A8A),
                                   letterSpacing: 1.2,
                                 ),
                               ),
-                              const SizedBox(height: 8),
+                              SizedBox(height: R.sp(8)),
                               if (_lowStock.isEmpty) ...[
-                                const Text(
+                                Text(
                                   '0',
                                   style: TextStyle(
-                                    fontSize: 28,
+                                    fontSize: R.fs(28),
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
-                                const Text(
+                                SizedBox(height: R.sp(4)),
+                                Text(
                                   'All Items Stocked',
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: R.fs(12),
                                     color: Color(0xFF8A8A8A),
                                   ),
                                 ),
                               ] else ...[
                                 Text(
                                   '${_lowStock.length}',
-                                  style: const TextStyle(
-                                    fontSize: 28,
+                                  style: TextStyle(
+                                    fontSize: R.fs(28),
                                     fontWeight: FontWeight.w700,
                                     color: Color(0xFFFF4757),
                                   ),
                                 ),
-                                const SizedBox(height: 4),
-                                const Text(
+                                SizedBox(height: R.sp(4)),
+                                Text(
                                   'Items Need Restocking',
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: R.fs(12),
                                     color: Color(0xFF8A8A8A),
                                   ),
                                 ),
@@ -589,7 +592,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: R.sp(12)),
                         if (PurchaseService.instance.isPro)
                           GestureDetector(
                             onTap: () {
@@ -628,7 +631,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             behavior: HitTestBehavior.opaque,
                             child: Container(
                               width: double.infinity,
-                              padding: const EdgeInsets.all(16),
+                              padding: EdgeInsets.all(R.sp(16)),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(16),
@@ -639,28 +642,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                Text(
                                   'MARGIN INSIGHTS',
                                   style: TextStyle(
-                                    fontSize: 11,
+                                    fontSize: R.fs(11),
                                     fontWeight: FontWeight.w600,
                                     color: Color(0xFF8A8A8A),
                                     letterSpacing: 1.2,
                                   ),
                                 ),
-                                const SizedBox(height: 12),
+                                SizedBox(height: R.sp(12)),
                                 Text(
                                   '${avgMargin.toStringAsFixed(1)}%',
-                                  style: const TextStyle(
-                                    fontSize: 28,
+                                  style: TextStyle(
+                                    fontSize: R.fs(28),
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
-                                const Text(
+                                SizedBox(height: R.sp(4)),
+                                Text(
                                   'Avg Margin Across All Items',
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: R.fs(12),
                                     color: Color(0xFF8A8A8A),
                                   ),
                                 ),
@@ -751,7 +754,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             },
                             child: Container(
                               width: double.infinity,
-                              padding: const EdgeInsets.all(16),
+                              padding: EdgeInsets.all(R.sp(16)),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(16),
@@ -766,10 +769,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text(
+                                      Text(
                                         'MARGIN INSIGHTS',
                                         style: TextStyle(
-                                          fontSize: 11,
+                                          fontSize: R.fs(11),
                                           fontWeight: FontWeight.w600,
                                           color: Color(0xFF8A8A8A),
                                           letterSpacing: 1.2,
@@ -786,10 +789,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           borderRadius:
                                               BorderRadius.circular(6),
                                         ),
-                                        child: const Text(
+                                        child: Text(
                                           'PRO',
                                           style: TextStyle(
-                                            fontSize: 11,
+                                            fontSize: R.fs(11),
                                             fontWeight: FontWeight.w700,
                                             color: Color(0xFF00C48C),
                                           ),
@@ -797,23 +800,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 12),
+                                  SizedBox(height: R.sp(12)),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '${avgMargin.toStringAsFixed(1)}%',
-                                        style: const TextStyle(
-                                          fontSize: 28,
+                                        style: TextStyle(
+                                          fontSize: R.fs(28),
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
-                                      const SizedBox(height: 4),
-                                      const Text(
+                                      SizedBox(height: R.sp(4)),
+                                      Text(
                                         'Avg Margin Across All Items',
                                         style: TextStyle(
-                                          fontSize: 12,
+                                          fontSize: R.fs(12),
                                           color: Color(0xFF8A8A8A),
                                         ),
                                       ),
@@ -959,7 +962,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     VoidCallback? onTap,
   }) {
     final card = Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(R.sp(16)),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: const Color(0xFFE4E6EA)),
@@ -970,14 +973,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 11,
+            style: TextStyle(
+              fontSize: R.fs(11),
               fontWeight: FontWeight.w600,
               color: Color(0xFF8A8A8A),
               letterSpacing: 1.2,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: R.sp(8)),
           if (locked)
             const Icon(Icons.lock_outline, size: 30, color: Color(0xFF999999))
           else
@@ -989,8 +992,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     value ?? '-',
-                    style: const TextStyle(
-                      fontSize: 32,
+                    style: TextStyle(
+                      fontSize: R.fs(28),
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF0A0A0A),
                       height: 1.1,
@@ -1002,8 +1005,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const Spacer(),
           Text(
             subtext,
-            style: const TextStyle(
-              fontSize: 13,
+            style: TextStyle(
+              fontSize: R.fs(12),
               color: Color(0xFF8A8A8A),
             ),
           ),
@@ -1037,7 +1040,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }) {
     return _listCard(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(R.sp(16)),
         child: Column(
           children: [
             Icon(icon, color: const Color(0xFF0A0A0A), size: 28),

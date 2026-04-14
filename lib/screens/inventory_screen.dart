@@ -7,6 +7,7 @@ import 'package:stocksnap/services/database_service.dart';
 import 'package:stocksnap/services/inventory_notifier.dart';
 import 'package:stocksnap/services/prefs_service.dart';
 import 'package:stocksnap/services/purchase_service.dart';
+import 'package:stocksnap/utils/responsive.dart';
 import 'package:stocksnap/widgets/item_card.dart';
 
 class InventoryScreen extends StatefulWidget {
@@ -283,10 +284,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Inventory',
           style: TextStyle(
-            fontSize: 28,
+            fontSize: R.fs(28),
             fontWeight: FontWeight.w700,
             letterSpacing: -0.5,
           ),
@@ -307,19 +308,21 @@ class _InventoryScreenState extends State<InventoryScreen> {
               child: TextField(
                 controller: _searchController,
                 onChanged: _onSearch,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Search Items...',
                   hintStyle: TextStyle(color: Color(0xFF8A8A8A), fontSize: 15),
                   prefixIcon: Icon(Icons.search, color: Color(0xFF8A8A8A), size: 20),
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  contentPadding: R.ph(16, 14),
                 ),
               ),
             ),
             Expanded(
               child: RefreshIndicator(
+                color: Color(0xFF1A1A1A),
+                backgroundColor: Colors.white,
                 onRefresh: _loadItems,
                 child: _loading
                     ? const Center(child: CircularProgressIndicator())
@@ -377,10 +380,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
                               )
                             : ListView.separated(
                                 physics: const AlwaysScrollableScrollPhysics(),
-                                padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
+                                padding: EdgeInsets.all(R.sp(16)),
                                 itemCount: _items.length,
                                 separatorBuilder: (context, index) =>
-                                    const SizedBox(height: 8),
+                                    SizedBox(height: R.sp(8)),
                                 itemBuilder: (context, index) {
                                   final item = _items[index];
                                   return ItemCard(

@@ -6,6 +6,7 @@ import 'package:stocksnap/services/database_service.dart';
 import 'package:stocksnap/services/stocksnap_tab_notifier.dart';
 import 'package:stocksnap/services/notification_service.dart';
 import 'package:stocksnap/services/prefs_service.dart';
+import 'package:stocksnap/main.dart' show checkForStockSnapAppUpdate;
 import 'package:stocksnap/services/purchase_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _index = stocksnapTabNotifier.value;
     stocksnapTabNotifier.addListener(_onTabNotifier);
     _refreshServices();
+    checkForStockSnapAppUpdate(context);
   }
 
   @override
@@ -76,8 +78,8 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: (value) => stocksnapTabNotifier.value = value,
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.view_list_outlined),
-              activeIcon: Icon(Icons.view_list_rounded),
+              icon: Icon(Icons.grid_view_outlined),
+              activeIcon: Icon(Icons.grid_view_rounded),
               label: 'Inventory',
             ),
             BottomNavigationBarItem(

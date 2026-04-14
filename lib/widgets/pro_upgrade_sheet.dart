@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:stocksnap/services/purchase_service.dart';
+import 'package:stocksnap/utils/responsive.dart';
 
 class StocksnapProPlanSheet extends StatefulWidget {
   const StocksnapProPlanSheet({super.key});
@@ -35,10 +36,10 @@ class _StocksnapProPlanSheetState extends State<StocksnapProPlanSheet> {
               ),
             ),
             const SizedBox(height: 14),
-            const Text(
+            Text(
               'StockSnap Pro',
               style: TextStyle(
-                fontSize: 22,
+                fontSize: R.fs(22),
                 fontWeight: FontWeight.w700,
                 color: Color(0xFF1A1A1A),
                 letterSpacing: -0.3,
@@ -99,7 +100,7 @@ class _StocksnapProPlanSheetState extends State<StocksnapProPlanSheet> {
                     },
               child: Container(
                 width: double.infinity,
-                height: 54,
+                height: R.sp(54),
                 decoration: BoxDecoration(
                   color: const Color(0xFF00C48C),
                   borderRadius: BorderRadius.circular(12),
@@ -194,6 +195,7 @@ class _StocksnapProPlanSheetState extends State<StocksnapProPlanSheet> {
 }
 
 class _FeatureRow extends StatelessWidget {
+  // ignore: prefer_const_constructors_in_immutables — uses R.fs for responsive type.
   const _FeatureRow({required this.text});
 
   final String text;
@@ -209,7 +211,7 @@ class _FeatureRow extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(fontSize: 14, color: Color(0xFF0A0A0A)),
+              style: TextStyle(fontSize: R.fs(14), color: Color(0xFF0A0A0A)),
             ),
           ),
         ],
