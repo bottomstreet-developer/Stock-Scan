@@ -56,10 +56,11 @@ class _StocksnapProPlanSheetState extends State<StocksnapProPlanSheet> {
               ),
             ),
             const SizedBox(height: 12),
-            const _FeatureRow(text: 'Unlimited items (free = 30)'),
-            const _FeatureRow(text: 'Profit & margin tracking'),
-            const _FeatureRow(text: 'Low stock alerts'),
-            const _FeatureRow(text: 'CSV export'),
+            const _FeatureRow(text: 'Unlimited Items (Free = 30)'),
+            const _FeatureRow(text: 'Profit & Margin Tracking'),
+            const _FeatureRow(text: 'Low Stock Alerts'),
+            const _FeatureRow(text: 'CSV Export'),
+            const _FeatureRow(text: 'Backup & Restore Inventory'),
             const SizedBox(height: 12),
             Row(
               children: [

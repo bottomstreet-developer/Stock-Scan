@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:in_app_update/in_app_update.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:stocksnap/screens/home_screen.dart';
@@ -44,8 +45,22 @@ Future<void> main() async {
   await PrefsService.instance.init();
   await DatabaseService.instance.database;
   await PurchaseService.instance.init();
+  await _ensureUserCode();
   await NotificationService.instance.init();
   runApp(const StockSnapApp());
+}
+
+Future<void> _ensureUserCode() async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    final existing = prefs.getString('user_code');
+    if (existing != null && existing.trim().isNotEmpty) return;
+    final customerInfo = await Purchases.getCustomerInfo();
+    final originalAppUserId = customerInfo.originalAppUserId;
+    if (originalAppUserId.trim().isEmpty) return;
+    await prefs.setString('user_code', originalAppUserId);
+    await Purchases.setAttributes({'user_code': originalAppUserId});
+  } catch (_) {}
 }
 
 class StockSnapApp extends StatelessWidget {

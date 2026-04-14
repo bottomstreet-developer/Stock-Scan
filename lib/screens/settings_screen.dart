@@ -11,6 +11,7 @@ import 'package:stocksnap/services/inventory_notifier.dart';
 import 'package:stocksnap/services/notification_service.dart';
 import 'package:stocksnap/services/prefs_service.dart';
 import 'package:stocksnap/services/purchase_service.dart';
+import 'package:stocksnap/services/backup_service.dart';
 import 'package:stocksnap/utils/responsive.dart';
 import 'package:stocksnap/widgets/pro_upgrade_sheet.dart';
 
@@ -24,6 +25,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   String _version = '-';
   String _currencySymbol = '\$';
+  Future<String?> _lastBackupDateFuture = BackupService.getLastBackupDate();
   bool _appLockEnabled = false;
   final LocalAuthentication _localAuth = LocalAuthentication();
 
@@ -419,10 +421,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    _featureRow('Unlimited items (free = 30)'),
-                    _featureRow('Profit & margin tracking'),
+                    _featureRow('Unlimited Items (Free = 30)'),
+                    _featureRow('Profit & Margin Tracking'),
                     _featureRow('Low Stock Alerts'),
-                    _featureRow('CSV export'),
+                    _featureRow('CSV Export'),
+                    _featureRow('Backup & Restore Inventory'),
                     const SizedBox(height: 16),
                     GestureDetector(
                       onTap: isPro ? null : () => showStocksnapProUpgradeSheet(context),
@@ -547,6 +550,132 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           onChanged: _handleAppLockToggle,
                         ),
                       ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            _card(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _sectionLabel('BACKUP'),
+                  FutureBuilder<String?>(
+                    future: _lastBackupDateFuture,
+                    builder: (context, snapshot) {
+                      final date = snapshot.data;
+                      return Text(
+                        date != null ? 'Last backed up: $date' : 'Never backed up',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFF8A8A8A),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  GestureDetector(
+                    onTap: () async {
+                      if (!PurchaseService.instance.isPro) {
+                        await showStocksnapProUpgradeSheet(context);
+                        return;
+                      }
+                      final ok = await BackupService.backupNow(context);
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(ok ? 'Backup complete' : 'Backup failed')),
+                      );
+                      if (ok && mounted) {
+                        setState(() {
+                          _lastBackupDateFuture = BackupService.getLastBackupDate();
+                        });
+                      }
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1A1A1A),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'Back Up Now',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  GestureDetector(
+                    onTap: () async {
+                      if (!PurchaseService.instance.isPro) {
+                        await showStocksnapProUpgradeSheet(context);
+                        return;
+                      }
+                      final confirm = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          title: const Text('Restore Backup'),
+                          content: const Text(
+                            'This will replace all your current inventory with the backup. This cannot be undone.',
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, false),
+                              child: const Text('Cancel',
+                                style: TextStyle(color: Color(0xFF888888))),
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF0A0A0A),
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              onPressed: () => Navigator.pop(context, true),
+                              child: const Text('Restore'),
+                            ),
+                          ],
+                        ),
+                      );
+                      if (confirm != true || !context.mounted) return;
+                      final ok = await BackupService.restoreBackup();
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(ok
+                          ? 'Restore complete. Restart the app.'
+                          : 'Restore failed')),
+                      );
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFFE0E0E0)),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'Restore Backup',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF8A8A8A),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],

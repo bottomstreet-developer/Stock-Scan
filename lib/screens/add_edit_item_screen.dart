@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -195,6 +194,7 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
     }
   }
 
+  // ignore: unused_element
   void _showPrefillPicker() {
     final currencySymbol = PrefsService.instance.currency;
     final samples = <Map<String, String>>[
@@ -402,18 +402,7 @@ class _AddEditItemScreenState extends State<AddEditItemScreen> {
     final currencySymbol = PrefsService.instance.currency;
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: kDebugMode
-          ? FloatingActionButton(
-              mini: true,
-              backgroundColor: Colors.orange,
-              onPressed: _showPrefillPicker,
-              child: const Icon(
-                Icons.bug_report,
-                color: Colors.white,
-                size: 18,
-              ),
-            )
-          : null,
+      floatingActionButton: null,
       body: Column(
         children: [
           Padding(
