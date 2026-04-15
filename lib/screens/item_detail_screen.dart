@@ -105,13 +105,14 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final currencySymbol = PrefsService.instance.currency;
-    final isPro = PurchaseService.instance.isPro;
     final hasPhoto = _item.photoPath != null && _item.photoPath!.isNotEmpty;
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.sizeOf(context).height * 0.82,
-      ),
-      child: Column(
+    return ValueListenableBuilder<bool>(
+      valueListenable: PurchaseService.instance.isProNotifier,
+      builder: (context, isPro, _) => ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.sizeOf(context).height * 0.82,
+        ),
+        child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Center(
@@ -364,6 +365,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
         ),
       ],
     ),
+      ),
     );
   }
 

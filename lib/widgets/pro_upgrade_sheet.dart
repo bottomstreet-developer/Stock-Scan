@@ -94,7 +94,25 @@ class _StocksnapProPlanSheetState extends State<StocksnapProPlanSheet> {
                             ? await PurchaseService.instance.purchaseAnnual()
                             : await PurchaseService.instance.purchaseMonthly();
                         if (!context.mounted) return;
-                        if (success) Navigator.of(context).pop(true);
+                        if (success) {
+                          Navigator.of(context).pop(true);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Purchase unavailable. Please try again.',
+                              ),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        if (!context.mounted) return;
+                        final msg = e.toString().contains('cancelled')
+                            ? 'Purchase cancelled.'
+                            : 'Something went wrong. Please try again.';
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(msg)),
+                        );
                       } finally {
                         if (mounted) setState(() => _isPurchasing = false);
                       }
@@ -196,7 +214,6 @@ class _StocksnapProPlanSheetState extends State<StocksnapProPlanSheet> {
 }
 
 class _FeatureRow extends StatelessWidget {
-  // ignore: prefer_const_constructors_in_immutables — uses R.fs for responsive type.
   const _FeatureRow({required this.text});
 
   final String text;
@@ -212,7 +229,7 @@ class _FeatureRow extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: TextStyle(fontSize: R.fs(14), color: Color(0xFF0A0A0A)),
+              style: TextStyle(fontSize: R.fs(14), color: const Color(0xFF0A0A0A)),
             ),
           ),
         ],
@@ -280,6 +297,8 @@ Future<bool?> showStocksnapProUpgradeSheet(BuildContext context) {
     context: context,
     backgroundColor: Colors.white,
     isScrollControlled: true,
+    useRootNavigator: true,
+    useSafeArea: true,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),

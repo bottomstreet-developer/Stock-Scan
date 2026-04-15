@@ -285,9 +285,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isPro = PurchaseService.instance.isPro;
     final currency = PrefsService.instance.currency;
-    return Scaffold(
+    return ValueListenableBuilder<bool>(
+      valueListenable: PurchaseService.instance.isProNotifier,
+      builder: (context, isPro, _) => Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
@@ -423,6 +424,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
           onPressed: _openAddItem,
           child: const Icon(Icons.add),
         ),
+      ),
       ),
     );
   }

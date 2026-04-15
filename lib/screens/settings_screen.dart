@@ -387,8 +387,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isPro = PurchaseService.instance.isPro;
-    return Scaffold(
+    return ValueListenableBuilder<bool>(
+      valueListenable: PurchaseService.instance.isProNotifier,
+      builder: (context, isPro, _) => Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
@@ -815,6 +816,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ],
           ],
         ),
+      ),
       ),
     );
   }

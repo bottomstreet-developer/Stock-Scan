@@ -69,21 +69,20 @@ class PurchaseService {
     return _purchaseByType(PackageType.annual);
   }
 
+  // Errors are intentionally NOT caught here — they bubble up to the UI
+  // so the sheet can show the user a meaningful error message instead of
+  // silently doing nothing (which caused the Apple review rejection).
   Future<bool> _purchaseByType(PackageType packageType) async {
-    try {
-      final offerings = await Purchases.getOfferings();
-      final current = offerings.current;
-      if (current == null) return false;
-      final package = current.availablePackages
-          .where((p) => p.packageType == packageType)
-          .firstOrNull;
-      if (package == null) return false;
-      await Purchases.purchasePackage(package);
-      await refreshProStatus();
-      return isPro;
-    } catch (_) {
-      return false;
-    }
+    final offerings = await Purchases.getOfferings();
+    final current = offerings.current;
+    if (current == null) throw Exception('No offerings available');
+    final package = current.availablePackages
+        .where((p) => p.packageType == packageType)
+        .firstOrNull;
+    if (package == null) throw Exception('Package type not found');
+    await Purchases.purchasePackage(package);
+    await refreshProStatus();
+    return isPro;
   }
 
   Future<bool> restorePurchases() async {
