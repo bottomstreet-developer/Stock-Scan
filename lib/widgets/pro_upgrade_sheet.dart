@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:stocksnap/services/purchase_service.dart';
 import 'package:stocksnap/utils/responsive.dart';
@@ -13,6 +14,31 @@ class StocksnapProPlanSheet extends StatefulWidget {
 class _StocksnapProPlanSheetState extends State<StocksnapProPlanSheet> {
   String _selectedPlan = 'yearly';
   bool _isPurchasing = false;
+  String _monthlyPrice = '\$4.99 / month';
+  String _yearlyPrice = '\$34.99 / year';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPrices();
+  }
+
+  Future<void> _loadPrices() async {
+    try {
+      final offerings = await PurchaseService.instance.getOfferings();
+      final packages = offerings?.current?.availablePackages ?? [];
+      for (final p in packages) {
+        final priceStr = p.storeProduct.priceString;
+        if (p.packageType == PackageType.monthly) {
+          if (mounted) setState(() => _monthlyPrice = '$priceStr / month');
+        } else if (p.packageType == PackageType.annual) {
+          if (mounted) setState(() => _yearlyPrice = '$priceStr / year');
+        }
+      }
+    } catch (_) {
+      // keep hardcoded fallback prices if fetch fails
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +94,7 @@ class _StocksnapProPlanSheetState extends State<StocksnapProPlanSheet> {
                   child: _PlanOption(
                     selected: _selectedPlan == 'yearly',
                     title: 'Yearly',
-                    subtitle: '\$34.99 / year',
+                    subtitle: _yearlyPrice,
                     onTap: () => setState(() => _selectedPlan = 'yearly'),
                   ),
                 ),
@@ -77,7 +103,7 @@ class _StocksnapProPlanSheetState extends State<StocksnapProPlanSheet> {
                   child: _PlanOption(
                     selected: _selectedPlan == 'monthly',
                     title: 'Monthly',
-                    subtitle: '\$4.99 / month',
+                    subtitle: _monthlyPrice,
                     onTap: () => setState(() => _selectedPlan = 'monthly'),
                   ),
                 ),
