@@ -9,7 +9,7 @@ class PurchaseService {
 
   static final PurchaseService instance = PurchaseService._();
   static const String _entitlementId = 'stocksnap_pro';
-  static const String _androidApiKey = 'goog_VwCbaIyncqJjCpPfw0DIUvVdpwL';
+  static const String _androidApiKey = 'goog_VwCbaIyncqJjCpPfwODIUvVdpwL';
   static const String _iosApiKey = 'appl_NSfnjqhiHLlXSAiWLANTmRcLWRE';
 
   final ValueNotifier<bool> isProNotifier = ValueNotifier<bool>(false);
@@ -73,15 +73,19 @@ class PurchaseService {
   // so the sheet can show the user a meaningful error message instead of
   // silently doing nothing (which caused the Apple review rejection).
   Future<bool> _purchaseByType(PackageType packageType) async {
+    print('[StockSnap] _purchaseByType called: $packageType');
     final offerings = await Purchases.getOfferings();
+    print('[StockSnap] offerings current: ${offerings.current?.identifier}');
     final current = offerings.current;
     if (current == null) throw Exception('No offerings available');
     final package = current.availablePackages
         .where((p) => p.packageType == packageType)
         .firstOrNull;
+    print('[StockSnap] package found: ${package?.identifier}');
     if (package == null) throw Exception('Package type not found');
     await Purchases.purchasePackage(package);
     await refreshProStatus();
+    print('[StockSnap] isPro after purchase: $isPro');
     return isPro;
   }
 

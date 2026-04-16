@@ -26,8 +26,14 @@ class _StocksnapProPlanSheetState extends State<StocksnapProPlanSheet> {
   Future<void> _loadPrices() async {
     try {
       final offerings = await PurchaseService.instance.getOfferings();
+      print(
+        '[StockSnap] offerings fetched: ${offerings?.current?.availablePackages.length} packages',
+      );
       final packages = offerings?.current?.availablePackages ?? [];
       for (final p in packages) {
+        print(
+          '[StockSnap] package: ${p.packageType} price: ${p.storeProduct.priceString}',
+        );
         final priceStr = p.storeProduct.priceString;
         if (p.packageType == PackageType.monthly) {
           if (mounted) setState(() => _monthlyPrice = '$priceStr / month');
@@ -35,8 +41,8 @@ class _StocksnapProPlanSheetState extends State<StocksnapProPlanSheet> {
           if (mounted) setState(() => _yearlyPrice = '$priceStr / year');
         }
       }
-    } catch (_) {
-      // keep hardcoded fallback prices if fetch fails
+    } catch (e) {
+      print('[StockSnap] _loadPrices error: $e');
     }
   }
 
